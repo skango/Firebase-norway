@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "306662302112",
+    "firebase_url": "https://bachelorassignment-5399c-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "bachelorassignment-5399c",
+    "storage_bucket": "bachelorassignment-5399c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306662302112:android:6aba537e3d16995a4204c5",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.Myproject1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWFh28rEbiMuTJT5sr5yXmdnqNvVgN1zE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
