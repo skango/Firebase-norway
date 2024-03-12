@@ -459,7 +459,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\n Hvis man finner en korrelasjon \n mellom for eksempel\n forkj\xF8else
+  m_text: "\n Hvis man finner en korrelasjon \n mellom for eksempel\n forkj\xF8lelse
     og C-vitamin, betyr\n ikke det at det n\xF8dvenigvis er \n en \xE5rsakssammenheng.
     Det\n kan for eksempel v\xE6re at de\n som tar C-vitamin tilskudd ogs\xE5\n har
     sunnere livsstil og at det er\n grunnen til hvorfor de holder\n seg friske. "

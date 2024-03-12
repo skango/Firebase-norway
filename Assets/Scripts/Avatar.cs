@@ -17,11 +17,24 @@ public class Avatar : MonoBehaviour
             for (int i = 0; i < outlines.Length; i++)
             {
                 outlines[i].gameObject.SetActive(false);
+                if (AccountSystem.instance.avatars[i] == this)
+                {
+                    AccountSystem.instance.SetAvatarValue(i);
+                }
             }
             active = !active;
             avatar.SetActive(active);
         });
     }
 
-    
+    public void SelectAvatar()
+    {
+        OutlineTag[] outlines = FindObjectsOfType<OutlineTag>(true);
+        for (int i = 0; i < outlines.Length; i++)
+        {
+            outlines[i].gameObject.SetActive(false);
+        }
+        active = !active;
+        avatar.SetActive(active);
+    }
 }

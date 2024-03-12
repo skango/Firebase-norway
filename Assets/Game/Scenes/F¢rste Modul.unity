@@ -314,7 +314,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "                    Mange tar C-vitamin mot \n                fork\xF8else.
+  m_text: "                    Mange tar C-vitamin mot \n                forkj\xF8lelse.
     Men vet vi egentlig \n                         om det virker?\n\n\t      I dette
     spillet vil du f\xE5 en rekke \n              sp\xF8rsm\xE5l som omhandler denne
     \n                        helsep\xE5standen. "
@@ -2661,7 +2661,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Hjelper C-vitamin mot forkj\xF8elsen? "
+  m_text: "Hjelper C-vitamin mot forkj\xF8lelsen? "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

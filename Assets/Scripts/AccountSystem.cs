@@ -4,6 +4,9 @@ using Firebase.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Firebase.Database;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class AccountSystem : MonoBehaviour
 {
@@ -15,14 +18,70 @@ public class AccountSystem : MonoBehaviour
     public Slider LoginSlider, RegisterSlider;
     private Color ImageColor, TextColor;
     public GameObject AvatarPage;
-    
+    private DatabaseReference databaseReference;
+    FirebaseUser CurrentUser;
+    public Avatar[] avatars;
+    public static AccountSystem instance;
+
     void Start()
     {
+        if (instance != null)
+        {
+            Destroy(instance.gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+        instance = this;
         ImageColor = LoginImages[0].color;
         TextColor = LoginTexts[0].color;
         InitializeFirebase();
+        StartCoroutine(GetAvatar());
     }
 
+    public void SetUserScore(int score)
+    {
+        string UID = CurrentUser.UserId;
+        // Construct the path
+        string path = $"Users/{UID}/score";
+
+        // Set the score value at the specified path
+        databaseReference.Child(path).SetValueAsync(score).ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Failed to set score in the database");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Score updated successfully");
+            }
+        });
+    }
+
+    IEnumerator GetAvatar()
+    {
+        yield return new WaitUntil(() => CurrentUser != null);
+        ReadAvatarValue(CurrentUser.UserId);
+        
+    }
+
+    // Adds a method to write or set the avatar value
+    public void SetAvatarValue(int avatarValue)
+    {
+        string UID = CurrentUser.UserId;
+        string path = $"Users/{UID}/avatar";
+        databaseReference.Child(path).SetValueAsync(avatarValue).ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Failed to set avatar value in the database. " + 
+                    task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Successfully set avatar value in the database.");
+            }
+        });
+    }
 
     private void Update()
     {
@@ -79,12 +138,50 @@ public class AccountSystem : MonoBehaviour
             {
                 
                 auth = FirebaseAuth.DefaultInstance;
+                // Firebase is ready for use
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
             }
             else
             {
                 Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
             }
         });
+    }
+
+    public int ReadAvatarValue(string UID)
+    {
+        // Construct the path to the user's avatar value
+        string path = $"Users/{UID}/avatar";
+        int value = -1;
+        // Read from the specified path
+        databaseReference.Child(path).GetValueAsync().ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Error accessing the database");
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+
+                // Check if the avatar value exists
+                if (snapshot.Exists && int.TryParse(snapshot.Value.ToString(), out int avatarValue))
+                {
+                    // Use the avatarValue as needed
+                    Debug.Log($"Avatar value: {avatarValue}");
+                    value =  avatarValue;
+                    avatars[value].SelectAvatar();
+                }
+                else
+                {
+                    
+                    // The path does not exist or is not an int
+                    Debug.Log("Avatar value does not exist or is not an int");
+                }
+            }
+        });
+
+        return value;
     }
 
     public void RegisterUser(string email, string password)
@@ -148,6 +245,7 @@ public class AccountSystem : MonoBehaviour
 
            
             FirebaseUser newUser = task.Result.User;
+            CurrentUser = newUser;
             Debug.LogFormat("Firebase user created successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
             AvatarPage.SetActive(true);
         });
@@ -200,11 +298,17 @@ public class AccountSystem : MonoBehaviour
 
             
             FirebaseUser user = task.Result.User;
+            CurrentUser = user;
             Debug.LogFormat("User signed in successfully: {0} ({1})", user.DisplayName, user.UserId);
             AvatarPage.SetActive(true);
         });
     }
 
+
+    public void LoadScene(int index)
+    {
+        SceneManager.LoadScene(index);
+    }
 
     public void OnRegisterButtonClick()
     {
