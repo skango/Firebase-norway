@@ -24,6 +24,7 @@ public class AccountSystem : MonoBehaviour
     public Avatar[] avatars;
     public static AccountSystem instance;
     public Sprite avatarSprite;
+    public TMP_InputField usernameField;
 
     void Start()
     {
@@ -68,7 +69,41 @@ public class AccountSystem : MonoBehaviour
 
     public string GetUsername()
     {
+        if (!string.IsNullOrEmpty(CurrentUser.DisplayName))
+        {
+            return CurrentUser.DisplayName;
+        }
         return CurrentUser?.Email;
+    }
+
+    public void UpdateUsernameFromProfile()
+    {
+        
+        UpdateDisplayName(usernameField.text);
+        FindObjectOfType<ProfilePage>().UpdateUsernames(usernameField.text);
+    }
+
+    public void UpdateDisplayName(string newDisplayName)
+    {
+        FirebaseUser user = CurrentUser;
+        if (user != null)
+        {
+            UserProfile profile = new UserProfile { DisplayName = newDisplayName };
+            user.UpdateUserProfileAsync(profile).ContinueWith(task => {
+                if (task.IsCanceled)
+                {
+                    Debug.LogError("UpdateUserProfileAsync was canceled.");
+                    return;
+                }
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("UpdateUserProfileAsync encountered an error: " + task.Exception);
+                    return;
+                }
+
+                Debug.Log("User profile updated successfully.");
+            });
+        }
     }
 
     public async Task<int> ReadUserScore()

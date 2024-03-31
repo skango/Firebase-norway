@@ -14,6 +14,11 @@ public class ProfilePage : MonoBehaviour
         UsernameText.text = UsernameText2.text = AccountSystem.instance.GetUsername();
     }
 
+
+    public void UpdateUsernames(string name)
+    {
+        UsernameText.text = UsernameText2.text = name;
+    }
     private void Update()
     {
         if (AccountSystem.instance.avatarSprite == null)
