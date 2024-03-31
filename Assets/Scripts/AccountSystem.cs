@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Firebase.Database;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class AccountSystem : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class AccountSystem : MonoBehaviour
     FirebaseUser CurrentUser;
     public Avatar[] avatars;
     public static AccountSystem instance;
+    public Sprite avatarSprite;
 
     void Start()
     {
@@ -64,6 +66,48 @@ public class AccountSystem : MonoBehaviour
         
     }
 
+    public string GetUsername()
+    {
+        return CurrentUser?.Email;
+    }
+
+    public async Task<int> ReadUserScore()
+    {
+        string UID = CurrentUser.UserId;
+        // Construct the path to the user's avatar value
+        string path = $"Users/{UID}/score";
+        int value = 0;
+        // Read from the specified path
+        await databaseReference.Child(path).GetValueAsync().ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Error accessing the database");
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+
+                // Check if the avatar value exists
+                if (snapshot.Exists && int.TryParse(snapshot.Value.ToString(), out int scoreValue))
+                {
+                    // Use the avatarValue as needed
+                    Debug.Log($"Score value: {scoreValue}");
+                    value = scoreValue;
+                    
+                }
+                else
+                {
+
+                    // The path does not exist or is not an int
+                    Debug.Log("score value does not exist or is not an int");
+                }
+            }
+        });
+
+        return value;
+    }
+
     // Adds a method to write or set the avatar value
     public void SetAvatarValue(int avatarValue)
     {
@@ -90,13 +134,13 @@ public class AccountSystem : MonoBehaviour
         int passwordLoginB = !string.IsNullOrEmpty(PasswordLogin.text) ? 1 : 0;
 
         float valueLogin = (emailLoginB * 0.5f) + (passwordLoginB * 0.5f);
-        LoginSlider.value = valueLogin;
+        //LoginSlider.value = valueLogin;
 
         int emailRegisterB = !string.IsNullOrEmpty(emailInputField.text) ? 1 : 0;
         int passwordRegisterB = !string.IsNullOrEmpty(passwordInputField.text) ? 1 : 0;
         int usernameRegisterB = !string.IsNullOrEmpty(UsernameField.text) ? 1 : 0;
         
-        float K = 1f / 3f;
+        float K = 0.8f / 3f;
         float valueRegister = (emailRegisterB * K) + (passwordRegisterB * K)
             + (usernameRegisterB * K); 
 
@@ -300,7 +344,8 @@ public class AccountSystem : MonoBehaviour
             FirebaseUser user = task.Result.User;
             CurrentUser = user;
             Debug.LogFormat("User signed in successfully: {0} ({1})", user.DisplayName, user.UserId);
-            AvatarPage.SetActive(true);
+            //AvatarPage.SetActive(true);
+            LoadScene(1);
         });
     }
 

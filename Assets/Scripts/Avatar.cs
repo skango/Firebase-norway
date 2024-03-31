@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,12 +15,14 @@ public class Avatar : MonoBehaviour
         GetComponent<Button>().onClick.AddListener(delegate
         {
             OutlineTag[] outlines = FindObjectsOfType<OutlineTag>(true);
+            
             for (int i = 0; i < outlines.Length; i++)
             {
                 outlines[i].gameObject.SetActive(false);
                 if (AccountSystem.instance.avatars[i] == this)
                 {
                     AccountSystem.instance.SetAvatarValue(i);
+                    AccountSystem.instance.avatarSprite = GetComponent<Image>().sprite;
                 }
             }
             active = !active;
@@ -30,11 +33,13 @@ public class Avatar : MonoBehaviour
     public void SelectAvatar()
     {
         OutlineTag[] outlines = FindObjectsOfType<OutlineTag>(true);
+        
         for (int i = 0; i < outlines.Length; i++)
         {
             outlines[i].gameObject.SetActive(false);
         }
         active = !active;
         avatar.SetActive(active);
+        AccountSystem.instance.avatarSprite = GetComponent<Image>().sprite;
     }
 }

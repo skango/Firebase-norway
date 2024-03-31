@@ -35,4 +35,12 @@ public class SceneChanger : MonoBehaviour
         SceneManager.LoadScene("Første Modul");
     }
 
+    public void SwitchToGameOption2()
+    {
+        SceneManager.LoadScene("Game Option 2");
+    }
+        public void SwitchToGameOption3()
+    {
+        SceneManager.LoadScene("Game Option 3");
+    }
 }

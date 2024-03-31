@@ -22,7 +22,7 @@ public class ChoiceManager : MonoBehaviour
 
     private bool answerSelected = false;
 
-    void Start()
+    async void Start()
     {
         fortsettButton.gameObject.SetActive(false);
         HideCheckImages();
@@ -31,6 +31,7 @@ public class ChoiceManager : MonoBehaviour
         feilButton.onClick.AddListener(() => OnFeilButtonClick());
 
         fortsettButton.onClick.AddListener(LoadForklaringScene);
+        score = await AccountSystem.instance.ReadUserScore();
     }
 
     void OnRiktigButtonClick()
