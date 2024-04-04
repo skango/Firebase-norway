@@ -25,6 +25,7 @@ public class AccountSystem : MonoBehaviour
     public static AccountSystem instance;
     public Sprite avatarSprite;
     public TMP_InputField usernameField;
+    public TMP_Text ScoreText;
 
     void Start()
     {
@@ -60,11 +61,16 @@ public class AccountSystem : MonoBehaviour
         });
     }
 
-    IEnumerator GetAvatar()
+     IEnumerator GetAvatar()
     {
         yield return new WaitUntil(() => CurrentUser != null);
         ReadAvatarValue(CurrentUser.UserId);
-        
+        LoadScore();
+    }
+
+    async void LoadScore()
+    {
+        ScoreText.text = (await ReadUserScore()).ToString();
     }
 
     public string GetUsername()
@@ -384,6 +390,7 @@ public class AccountSystem : MonoBehaviour
         });
     }
 
+    
 
     public void LoadScene(int index)
     {

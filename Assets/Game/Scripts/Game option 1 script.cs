@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class ChoiceManager : MonoBehaviour
 {
@@ -50,6 +51,7 @@ public class ChoiceManager : MonoBehaviour
             wrongText.gameObject.SetActive(false);
             fortsettButton.gameObject.SetActive(true);
             answerMessageCorrectText.text = "Riktig!";
+            StartCoroutine(LoadGame2());
         }
     }
 
@@ -70,7 +72,14 @@ public class ChoiceManager : MonoBehaviour
 
             fortsettButton.gameObject.SetActive(true);
             answerMessageWrongText.text = "Feil!";
+            StartCoroutine(LoadGame2());
         }
+    }
+
+    IEnumerator LoadGame2()
+    {
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene(2);
     }
 
     void UpdateScoreUI()
