@@ -394,6 +394,7 @@ public class AccountSystem : MonoBehaviour
 
     public void LoadScene(int index)
     {
+        return;
         SceneManager.LoadScene(index);
     }
 
