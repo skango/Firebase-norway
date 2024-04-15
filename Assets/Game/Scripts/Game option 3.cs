@@ -82,6 +82,7 @@ public class FillText : MonoBehaviour
             
             UpdateScoreText();
         }
+        AccountSystem.instance.SetUserScore(score);
     }
 
     void HideCheckImages()

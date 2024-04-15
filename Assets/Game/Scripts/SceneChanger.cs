@@ -32,7 +32,7 @@ public class SceneChanger : MonoBehaviour
     }
     public void SwitchToFørsteModul()
     {
-        SceneManager.LoadScene("Første Modul");
+        SceneManager.LoadScene(7);
     }
 
     public void SwitchToGameOption2()

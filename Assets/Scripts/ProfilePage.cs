@@ -6,12 +6,14 @@ using UnityEngine.UI;
 
 public class ProfilePage : MonoBehaviour
 {
-    public TMP_Text UsernameText,UsernameText2;
+    public TMP_Text UsernameText, UsernameText2,Score;
     public Image avatar;
 
     void Start()
     {
-        UsernameText.text = UsernameText2.text = AccountSystem.instance.GetUsername();
+        Score.text = PlayerPrefs.GetInt("Score").ToString();
+        AccountSystem.instance.StartCoroutine(AccountSystem.instance.GetAvatar());
+        UsernameText.text = UsernameText2.text = AccountSystem.instance.GetUsername();       
     }
 
 

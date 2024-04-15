@@ -27,14 +27,19 @@ public class AccountSystem : MonoBehaviour
     public TMP_InputField usernameField;
     public TMP_Text ScoreText;
 
-    void Start()
+    private void Awake()
     {
         if (instance != null)
         {
-            Destroy(instance.gameObject);
+            Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
         instance = this;
+    }
+
+    void Start()
+    {
+        
         ImageColor = LoginImages[0].color;
         TextColor = LoginTexts[0].color;
         InitializeFirebase();
@@ -61,7 +66,7 @@ public class AccountSystem : MonoBehaviour
         });
     }
 
-     IEnumerator GetAvatar()
+     public IEnumerator GetAvatar()
     {
         yield return new WaitUntil(() => CurrentUser != null);
         ReadAvatarValue(CurrentUser.UserId);
@@ -135,7 +140,7 @@ public class AccountSystem : MonoBehaviour
                     // Use the avatarValue as needed
                     Debug.Log($"Score value: {scoreValue}");
                     value = scoreValue;
-                    
+                    PlayerPrefs.SetInt("Score", value);
                 }
                 else
                 {
@@ -394,7 +399,7 @@ public class AccountSystem : MonoBehaviour
 
     public void LoadScene(int index)
     {
-        return;
+        
         SceneManager.LoadScene(index);
     }
 

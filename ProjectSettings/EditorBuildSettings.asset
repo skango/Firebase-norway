@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Game option 2.unity
     guid: f575b7a10249cc84da39ebab3e90e9dc
   - enabled: 1
+    path: Assets/Game/Scenes/Game option 3.unity
+    guid: e3f431e7e5f00d24a8e32028bf9fb927
+  - enabled: 1
     path: Assets/Game/Scenes/Duell.unity
     guid: f75531c000623e6448a966504a9f1679
   - enabled: 1
@@ -24,20 +27,17 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Forside.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: "Assets/Game/Scenes/F\xA2rste Modul.unity"
+    path: "Assets/Game/Scenes/F\xF8rste Modul.unity"
     guid: 5c30b93b4abbc574e8a3e8c1bab77902
-  - enabled: 1
-    path: Assets/Game/Scenes/Game option 3.unity
-    guid: e3f431e7e5f00d24a8e32028bf9fb927
   - enabled: 1
     path: Assets/Game/Scenes/Ledertavle.unity
     guid: 5096a15bcdb7357449c076f7234c16e9
   - enabled: 1
+    path: Assets/Profil.unity
+    guid: 304c18abbf65df14a8c1b2d9b792dbe2
+  - enabled: 1
     path: Assets/Game/Scenes/Log inn anonym.unity
     guid: b6ff9574efe2f8a42b21b67ff42bc515
-  - enabled: 1
-    path: Assets/Game/Scenes/Profil.unity
-    guid: e35dafc9517c02349826bb9ede3d428c
   - enabled: 1
     path: Assets/Game/Scenes/Velkommen side.unity
     guid: a559dcad114cd524bb420c971f63cb38
