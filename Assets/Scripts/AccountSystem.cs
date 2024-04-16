@@ -8,6 +8,7 @@ using Firebase.Database;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public class AccountSystem : MonoBehaviour
 {
@@ -46,6 +47,49 @@ public class AccountSystem : MonoBehaviour
         StartCoroutine(GetAvatar());
     }
 
+
+    public Task<List<PlayerData>> FetchTopPlayersAsync()
+    {
+        var tcs = new TaskCompletionSource<List<PlayerData>>();
+        List<PlayerData> topPlayers = new List<PlayerData>();
+
+        databaseReference.Child("Users").OrderByChild("score").LimitToLast(6).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Error retrieving data: " + task.Exception);
+                tcs.SetException(task.Exception);
+                return;
+            }
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (!snapshot.Exists)
+                {
+                    Debug.Log("No data available.");
+                    tcs.SetResult(new List<PlayerData>()); // Return an empty list
+                    return;
+                }
+
+                foreach (DataSnapshot childSnapshot in snapshot.Children)
+                {
+                    string userID = childSnapshot.Key;
+                    long score = childSnapshot.Child("score").Value as long? ?? 0;
+                    int avatar = (int)(childSnapshot.Child("avatar").Value as long? ?? 0);
+                    string username = childSnapshot.Child("username").Value as string ?? userID; // Retrieve the username
+                    topPlayers.Insert(0, new PlayerData(userID, score, avatar, username)); // Include username in PlayerData
+                }
+
+                tcs.SetResult(topPlayers);
+            }
+        });
+
+        return tcs.Task;
+    }
+
+
+
+
     public void SetUserScore(int score)
     {
         string UID = CurrentUser.UserId;
@@ -54,6 +98,18 @@ public class AccountSystem : MonoBehaviour
 
         // Set the score value at the specified path
         databaseReference.Child(path).SetValueAsync(score).ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Failed to set score in the database");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Score updated successfully");
+            }
+        });
+
+        databaseReference.Child($"Users/{UID}/username").SetValueAsync(CurrentUser.Email).ContinueWithOnMainThread(task => {
             if (task.IsFaulted)
             {
                 // Handle the error...
@@ -418,3 +474,20 @@ public class AccountSystem : MonoBehaviour
     }
 
 }
+
+public class PlayerData
+{
+    public string UserID { get; private set; }
+    public long Score { get; private set; }
+    public int Avatar { get; private set; }
+    public string Username { get; private set; } // Added Username property
+
+    public PlayerData(string userID, long score, int avatar, string username) // Include username in the constructor
+    {
+        UserID = userID;
+        Score = score;
+        Avatar = avatar;
+        Username = username;
+    }
+}
+

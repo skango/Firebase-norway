@@ -5,18 +5,27 @@ using System.Linq;
 
 public class Leaderboard : MonoBehaviour
 {
-    private Dictionary<string, Text> leaderboardTexts = new Dictionary<string, Text>(); 
+    
     private List<Player> players = new List<Player>();
+    public List<Text> PlayerTexts = new List<Text>();
+    public List<Sprite> avatarsprites = new List<Sprite>();
+    public List<Image> userProfiles = new List<Image>();
 
     void Start()
-    {
-        
+    {        
         LoadPlayersFromDatabase();
     }
 
-    void LoadPlayersFromDatabase()
+    async void LoadPlayersFromDatabase()
     {
        
+       var task = await AccountSystem.instance.FetchTopPlayersAsync();
+       for (int i = 0; i < task.Count; i++)
+       {
+            PlayerTexts[i].text = task[i].Username;
+            userProfiles[i].sprite = avatarsprites[i];
+            Debug.Log(task[i].Username);
+       }
     }
 
    
