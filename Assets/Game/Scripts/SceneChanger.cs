@@ -9,6 +9,11 @@ public class SceneChanger : MonoBehaviour
         SceneManager.LoadScene("Forside");
     }
 
+    public void LoadScene(int sceneId)
+    {
+        SceneManager.LoadScene(sceneId);
+    }
+
     public void ChangeToProfilScene()
     {
         Debug.Log("Changing to Profil scene");

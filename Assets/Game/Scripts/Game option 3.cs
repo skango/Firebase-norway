@@ -28,13 +28,14 @@ public class FillText : MonoBehaviour
 
     private int score = 0;
 
-    void Start()
+    async void Start()
     {
         option1Button.onClick.AddListener(() => OnOptionButtonClick(option1Text, option1IsCorrectForFirstSlot, option1IsCorrectForSecondSlot, 0));
         option2Button.onClick.AddListener(() => OnOptionButtonClick(option2Text, option2IsCorrectForFirstSlot, option2IsCorrectForSecondSlot, 1));
         option3Button.onClick.AddListener(() => OnOptionButtonClick(option3Text, option3IsCorrectForFirstSlot, option3IsCorrectForSecondSlot, 2));
         
         HideCheckImages();
+        score = await AccountSystem.instance.ReadUserScore();
     }
 
     void OnOptionButtonClick(string optionText, bool isCorrectForFirstSlot, bool isCorrectForSecondSlot, int optionIndex)

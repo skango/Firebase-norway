@@ -9,6 +9,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Net.Http;
+
 
 public class AccountSystem : MonoBehaviour
 {
@@ -32,9 +34,13 @@ public class AccountSystem : MonoBehaviour
     {
         if (instance != null)
         {
-            Destroy(gameObject);
+            if (instance != this)
+            {
+                Destroy(instance.gameObject);
+            }
+           
         }
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(transform.root.gameObject);
         instance = this;
     }
 
@@ -45,6 +51,7 @@ public class AccountSystem : MonoBehaviour
         TextColor = LoginTexts[0].color;
         InitializeFirebase();
         StartCoroutine(GetAvatar());
+        
     }
 
 
@@ -88,8 +95,107 @@ public class AccountSystem : MonoBehaviour
     }
 
 
+    public void SetRating1(int rate)
+    {
+        string UID = CurrentUser.UserId;
+        // Construct the path
+        string path = $"Ratings/{UID}/question1";
+
+        // Set the score value at the specified path
+        databaseReference.Child(path).SetValueAsync(rate).ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Failed to set score in the database");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Score updated successfully");
+            }
+        });
+    }
+
+    public void SetRating2(int rate)
+    {
+        string UID = CurrentUser.UserId;
+        // Construct the path
+        string path = $"Ratings/{UID}/question2";
+
+        // Set the score value at the specified path
+        databaseReference.Child(path).SetValueAsync(rate).ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Failed to set score in the database");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Score updated successfully");
+            }
+        });
+    }
+
+    public void SetRatingStar(int rate)
+    {
+        string UID = CurrentUser.UserId;
+        // Construct the path
+        string path = $"Ratings/{UID}/stars";
+
+        // Set the score value at the specified path
+        databaseReference.Child(path).SetValueAsync(rate).ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Failed to set score in the database");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Score updated successfully");
+            }
+        });
+    }
 
 
+    public void SetComment1(string body)
+    {
+        string UID = CurrentUser.UserId;
+        // Construct the path
+        string path = $"Ratings/{UID}/comment1";
+
+        // Set the score value at the specified path
+        databaseReference.Child(path).SetValueAsync(body).ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Failed to set score in the database");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Score updated successfully");
+            }
+        });
+    }
+
+
+    public void SetComment2(string body)
+    {
+        string UID = CurrentUser.UserId;
+        // Construct the path
+        string path = $"Ratings/{UID}/comment2";
+
+        // Set the score value at the specified path
+        databaseReference.Child(path).SetValueAsync(body).ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Failed to set score in the database");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Score updated successfully");
+            }
+        });
+    }
     public void SetUserScore(int score)
     {
         string UID = CurrentUser.UserId;
@@ -231,6 +337,10 @@ public class AccountSystem : MonoBehaviour
 
     private void Update()
     {
+        if (CurrentUser == null && UserHolder.USER != null)
+        {
+            CurrentUser = UserHolder.USER;
+        }
 
         int emailLoginB = !string.IsNullOrEmpty(EmailLogin.text) ? 1 : 0;
         int passwordLoginB = !string.IsNullOrEmpty(PasswordLogin.text) ? 1 : 0;
@@ -392,6 +502,7 @@ public class AccountSystem : MonoBehaviour
            
             FirebaseUser newUser = task.Result.User;
             CurrentUser = newUser;
+            UserHolder.USER = newUser;
             Debug.LogFormat("Firebase user created successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
             AvatarPage.SetActive(true);
         });
@@ -445,6 +556,7 @@ public class AccountSystem : MonoBehaviour
             
             FirebaseUser user = task.Result.User;
             CurrentUser = user;
+            UserHolder.USER = user;
             Debug.LogFormat("User signed in successfully: {0} ({1})", user.DisplayName, user.UserId);
             //AvatarPage.SetActive(true);
             LoadScene(1);
