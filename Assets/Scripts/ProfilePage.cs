@@ -6,14 +6,16 @@ using UnityEngine.UI;
 
 public class ProfilePage : MonoBehaviour
 {
-    public TMP_Text UsernameText, UsernameText2,Score;
+    public TMP_Text UsernameText, UsernameText2, Score, questionTxt;
     public Image avatar;
 
-    void Start()
+    IEnumerator Start()
     {
+        yield return new WaitForSeconds(1);
         Score.text = PlayerPrefs.GetInt("Score").ToString();
         AccountSystem.instance.StartCoroutine(AccountSystem.instance.GetAvatar());
-        UsernameText.text = UsernameText2.text = AccountSystem.instance.GetUsername();       
+        UsernameText.text = UsernameText2.text = AccountSystem.instance.GetUsername();
+        questionTxt.text = $"Du har {3 - AccountSystem.instance.question } spørsmål igjen å fullføre";
     }
 
 

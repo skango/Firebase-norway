@@ -29,7 +29,7 @@ public class AccountSystem : MonoBehaviour
     public Sprite avatarSprite;
     public TMP_InputField usernameField;
     public TMP_Text ScoreText;
-
+    public int question;
     private void Awake()
     {
         if (instance != null)
@@ -228,11 +228,31 @@ public class AccountSystem : MonoBehaviour
         });
     }
 
+    public void SetUserQuestion(int val)
+    {
+        string UID = CurrentUser.UserId;
+        // Construct the path
+        string path = $"Users/{UID}/question";
+
+        // Set the score value at the specified path
+        databaseReference.Child(path).SetValueAsync(val).ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Failed to set score in the database");
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Score updated successfully");
+            }
+        });
+    }
      public IEnumerator GetAvatar()
     {
         yield return new WaitUntil(() => CurrentUser != null);
         ReadAvatarValue(CurrentUser.UserId);
         LoadScore();
+        GetQuestion();
     }
 
     async void LoadScore()
@@ -400,6 +420,42 @@ public class AccountSystem : MonoBehaviour
             else
             {
                 Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+            }
+        });
+    }
+
+
+    public void GetQuestion()
+    {
+        string UID = CurrentUser.UserId;
+        // Construct the path to the user's avatar value
+        string path = $"Users/{UID}/question";
+        int value = -1;
+        // Read from the specified path
+        databaseReference.Child(path).GetValueAsync().ContinueWithOnMainThread(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+                Debug.LogError("Error accessing the database");
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+
+                // Check if the avatar value exists
+                if (snapshot.Exists && int.TryParse(snapshot.Value.ToString(), out int avatarValue))
+                {
+                    // Use the avatarValue as needed
+                    Debug.Log($"Avatar value: {avatarValue}");
+                    value = avatarValue;
+                    question = value;
+                }
+                else
+                {
+
+                    // The path does not exist or is not an int
+                    Debug.Log("question value does not exist or is not an int");
+                }
             }
         });
     }

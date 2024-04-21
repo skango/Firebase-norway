@@ -65,6 +65,7 @@ public class MultipleChoiceManager : MonoBehaviour
                 UpdateScoreUI();
             }
             AccountSystem.instance.SetUserScore(score);
+            AccountSystem.instance.SetUserQuestion(2);
         }
     }
 

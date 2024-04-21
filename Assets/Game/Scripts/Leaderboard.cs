@@ -22,7 +22,13 @@ public class Leaderboard : MonoBehaviour
        var task = await AccountSystem.instance.FetchTopPlayersAsync();
        for (int i = 0; i < task.Count; i++)
        {
-            PlayerTexts[i].text = task[i].Username;
+            if (i > 2)
+            {
+                PlayerTexts[i].text = $"{task[i].Username} {task[i].Score} P";
+            }else
+            {
+                PlayerTexts[i].text = $"{task[i].Username}";
+            }
             userProfiles[i].sprite = avatarsprites[i];
             Debug.Log(task[i].Username);
        }

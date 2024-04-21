@@ -32,7 +32,7 @@ public class ChoiceManager : MonoBehaviour
         feilButton.onClick.AddListener(() => OnFeilButtonClick());
 
         fortsettButton.onClick.AddListener(LoadForklaringScene);
-        score = await AccountSystem.instance.ReadUserScore();
+        //score = await AccountSystem.instance.ReadUserScore();
     }
 
     void OnRiktigButtonClick()
@@ -42,6 +42,7 @@ public class ChoiceManager : MonoBehaviour
             score += 100;
             UpdateScoreUI();
             AccountSystem.instance.SetUserScore(score);
+            AccountSystem.instance.SetUserQuestion(1);
             greenCheckImageForRiktig.SetActive(true);
             redCheckImageForRiktig.SetActive(false);
             answerSelected = true;
